@@ -53,6 +53,10 @@ inputs:
     required: false
     default: '${{ github.token }}'
     description: 'The GITHUB_TOKEN secret or personal access token to authenticate. Defaults to `github.token`.'
+  watch-mention:
+    required: false
+    default: ''
+    description: 'Trigger code review when this string is mentioned in a PR comment, e.g. `@github-actions`. Requires `issue_comment` event in the workflow.'
 
 runs:
   using: 'composite'
@@ -74,11 +78,22 @@ runs:
         let ghToken = '${{ inputs.github-token }}'
         let sysPrompt = '${{ inputs.sys-prompt }}'
         let userPrompt = '${{ inputs.user-prompt }}'
-        let pr = '${{ github.event.pull_request.number }}'
+        let pr = '${{ github.event.pull_request.number }}' | if $in == '' { '${{ github.event.issue.number }}' } else { $in }
         let includePatterns = '${{ inputs.include-patterns }}'
         let excludePatterns = '${{ inputs.exclude-patterns }}'
         let maxLength = try { '${{ inputs.max-length }}' | into int } catch { 0 }
         let temperature = try { '${{ inputs.temperature }}' | into float } catch { 0.3 }
+        let watchMention = '${{ inputs.watch-mention }}'
+        if '${{ github.event_name }}' == 'issue_comment' {
+          if ($watchMention | is-empty) {
+            print 'Not triggered by a PR event and no watch-mention configured, exiting.'
+            exit 0
+          }
+          if not ('${{ github.event.comment.body }}' | str contains $watchMention) {
+            print 'The comment does not mention the watch-mention string, exiting.'
+            exit 0
+          }
+        }
         (deepseek-review $token
           --model $model
           --repo $repo
