@@ -92,6 +92,10 @@ runs:
             print 'Not a pull request comment, skipping.'
             exit 0
           }
+          if ($event.sender?.type? == 'Bot') {
+            print 'Comment from bot, skipping to avoid infinite loop.'
+            exit 0
+          }
           if ($watchMention | is-empty) {
             print 'Not triggered by a PR event and no watch-mention configured, exiting.'
             exit 0
