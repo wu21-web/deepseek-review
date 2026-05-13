@@ -97,7 +97,7 @@ runs:
             exit 0
           }
           if ($watchMention | is-empty) {
-            print 'Not triggered by a PR event and no watch-mention configured, exiting.'
+            print 'issue_comment trigger fired but no watch-mention configured, exiting.'
             exit 0
           }
           let commentBody = $event.comment?.body? | default ''
