@@ -101,7 +101,7 @@ runs:
             exit 0
           }
           let commentBody = $event.comment?.body? | default ''
-          if not ($commentBody | str contains $watchMention) {
+          if not ($commentBody =~ $'($watchMention)\b') {
             print 'The comment does not mention the watch-mention string, exiting.'
             exit 0
           }
