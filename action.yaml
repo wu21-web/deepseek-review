@@ -100,6 +100,11 @@ runs:
             print 'issue_comment trigger fired but no watch-mention configured, exiting.'
             exit 0
           }
+          let allowed = ['OWNER' 'MEMBER' 'COLLABORATOR']
+          if ($event.comment?.author_association? not-in $allowed) {
+            print 'Comment author lacks write access, skipping.'
+            exit 0
+          }
           let commentBody = $event.comment?.body? | default ''
           if not ($commentBody =~ $'($watchMention)\b') {
             print 'The comment does not mention the watch-mention string, exiting.'
