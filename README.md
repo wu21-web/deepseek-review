@@ -145,6 +145,7 @@ jobs:
           base-url: 'https://api.siliconflow.cn/v1'
           watch-mention: '@github-actions'
           chat-token: ${{ secrets.CHAT_TOKEN }}
+          allowed-associations: 'OWNER,MEMBER,COLLABORATOR'       #Optional, defaults to this
 ```
 
 **PRECAUTIONS**:
