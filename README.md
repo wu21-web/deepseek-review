@@ -33,7 +33,7 @@
 
 ## Planned Features
 
-- [ ] **Trigger Code Review on Mention**: Automatically initiate code review when the `github-actions` bot is mentioned in a PR comment.
+- [x] **Trigger Code Review on Mention**: Automatically initiate code review when the `github-actions` bot is mentioned in a PR comment.
 - [ ] **Generate Commit Message Locally**: Generate a commit message for the code changes in any local repository.
 
 ## Code Review with GitHub Action
@@ -114,6 +114,46 @@ jobs:
 
 With this setup, DeepSeek code review will not run automatically upon PR creation. Instead, it will only be triggered when you manually add the `ai review` label.
 
+### Trigger Code Review via PR Comment Mention
+
+You can trigger code review by mentioning a specific string (e.g. `@github-actions`) in a PR comment. First, add `issue_comment` to your workflow events, then configure the `watch-mention` input:
+
+```yaml
+name: Code Review
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  issue_comment:
+    types:
+      - created     # Triggers when a comment is created on a PR
+
+permissions:
+  pull-requests: write
+
+jobs:
+  setup-deepseek-review:
+    runs-on: ubuntu-latest
+    name: Code Review
+    steps:
+      - name: DeepSeek Code Review
+        uses: hustcer/deepseek-review@v1
+        with:
+          model: 'deepseek-ai/DeepSeek-R1'
+          base-url: 'https://api.siliconflow.cn/v1'
+          watch-mention: '@github-actions'
+          chat-token: ${{ secrets.CHAT_TOKEN }}
+```
+
+When a PR comment contains the `watch-mention` string:
+- Subsequent mentions in the same PR don't retrigger an existing review.
+- The review results are posted as a new comment on the same PR.
+- Only users with write access (`OWNER`, `MEMBER`, `COLLABORATOR`) can trigger reviews.
+- Bot comments (users ending with `[bot]`) are ignored to prevent infinite loops.
+- Comments on issues without an associated PR are ignored.
+
 ## Input Parameters
 
 | Name           | Type   | Description                                                             |
@@ -128,6 +168,7 @@ With this setup, DeepSeek code review will not run automatically upon PR creatio
 | include-patterns | String | Optional, Comma-separated file patterns to include in the code review. No default |
 | exclude-patterns | String | Optional, Comma-separated file patterns to exclude from the code review. Defaults to `pnpm-lock.yaml,package-lock.json,*.lock` |
 | github-token   | String | Optional, The `GITHUB_TOKEN` secret or personal access token to authenticate. Defaults to `${{ github.token }}`. |
+| watch-mention  | String | Optional, Trigger code review when this string is mentioned in a PR comment, e.g. `@github-actions`. Requires `issue_comment` event in the workflow. |
 
 **DeepSeek API Call Payload**:
 
