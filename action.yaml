@@ -92,7 +92,7 @@ runs:
             print 'Not a pull request comment, skipping.'
             exit 0
           }
-          if ($event.sender?.type? == 'Bot') {
+          if ($event.sender?.type? == 'Bot') or ($event.sender?.login? | str ends-with '[bot]') {
             print 'Comment from bot, skipping to avoid infinite loop.'
             exit 0
           }
