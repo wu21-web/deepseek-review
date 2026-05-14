@@ -147,12 +147,15 @@ jobs:
           chat-token: ${{ secrets.CHAT_TOKEN }}
 ```
 
-When a PR comment contains the `watch-mention` string:
+**PRECAUTIONS**:
 - Subsequent mentions in the same PR don't retrigger an existing review.
 - The review results are posted as a new comment on the same PR.
-- Only users with write access (`OWNER`, `MEMBER`, `COLLABORATOR`) can trigger reviews.
-- Bot comments (users ending with `[bot]`) are ignored to prevent infinite loops.
+- Bot comments (users ending with `[bot]`) are ignored.
 - Comments on issues without an associated PR are ignored.
+> [!NOTE]
+> By default, only **CALABORATORs, OWNER, MEMBERs can trigger the code review** by mentioning `@github-actions`. Other users without write access will be ignored.
+> You can change this by appending or removing roles in `allowed-associations`. For example, if you want to let contributors trigger code reviews, set it as follows
+> `allowed-associations: 'OWNER,MEMBER,COLLABORATOR,CONTRIBUTOR'`
 
 ## Input Parameters
 
