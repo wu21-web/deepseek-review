@@ -152,7 +152,7 @@ jobs:
 - 机器人评论 （结尾含有`[bot]`的用户的评论）会被忽略。
 - 没有关联 PR 的议题上的评论将被忽略。
 >[!NOTE]
->默认配置中，只有**CALABORATORs, OWNER, MEMBERs 能通过提及`@github-actions`触发审查**。
+>默认配置中，只有**COLLABORATORs, OWNER, MEMBERs 能通过提及`@github-actions`触发审查**。
 >其他没有写权限的用户的评论会被忽略。
 >您可以通过在 `allowed-associations` 中添加或移除角色来更改此设置。例如，如果您想允许贡献者触发代码审查，请按如下方式设置工作流：
 > `allowed-associations: 'OWNER,MEMBER,COLLABORATOR,CONTRIBUTOR'`
