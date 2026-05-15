@@ -145,7 +145,7 @@ jobs:
           base-url: 'https://api.siliconflow.cn/v1'
           watch-mention: '@github-actions'
           chat-token: ${{ secrets.CHAT_TOKEN }}
-          allowed-associations: 'OWNER,MEMBER,COLLABORATOR'       #Optional, defaults to this
+          allowed-associations: 'OWNER,MEMBER,COLLABORATOR'
 ```
 
 **PRECAUTIONS**:
@@ -154,8 +154,9 @@ jobs:
 - Bot comments (users ending with `[bot]`) are ignored.
 - Comments on issues without an associated PR are ignored.
 > [!NOTE]
-> By default, only **CALABORATORs, OWNER, MEMBERs can trigger the code review** by mentioning `@github-actions`. Other users without write access will be ignored.
-> You can change this by appending or removing roles in `allowed-associations`. For example, if you want to let contributors trigger code reviews, set it as follows
+> By default, only **CALABORATORs, OWNER, MEMBERs can trigger the code review** by mentioning `@github-actions`.
+> Other users without write access will be ignored.
+> You can change this by appending or removing roles in `allowed-associations`. For example, if you want to enable contributors to trigger code reviews, set it as follows:
 > `allowed-associations: 'OWNER,MEMBER,COLLABORATOR,CONTRIBUTOR'`
 
 ## Input Parameters
@@ -173,6 +174,7 @@ jobs:
 | exclude-patterns | String | Optional, Comma-separated file patterns to exclude from the code review. Defaults to `pnpm-lock.yaml,package-lock.json,*.lock` |
 | github-token   | String | Optional, The `GITHUB_TOKEN` secret or personal access token to authenticate. Defaults to `${{ github.token }}`. |
 | watch-mention  | String | Optional, Trigger code review when this string is mentioned in a PR comment, e.g. `@github-actions`. Requires `issue_comment` event in the workflow. |
+| allowed-associations | String | Optional, Contains allowed roles for triggering a code review by mentioning `@github-actions`. |
 
 **DeepSeek API Call Payload**:
 
