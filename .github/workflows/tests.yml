@@ -40,6 +40,7 @@ jobs:
         platform: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04-arm]
 
     runs-on: ${{ matrix.platform }}
+    continue-on-error: ${{ matrix.version == 'nightly' }}
 
     steps:
       - uses: actions/checkout@v7
