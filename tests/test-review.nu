@@ -134,7 +134,6 @@ def 'both exclude and include should work as expected' [] {
     | get-uw) 2576
 }
 
-@test
 def 'gh-headers：should return correct GitHub API headers structure' [] {
   $env.GH_TOKEN = 'test-token-abc123'
   let headers = gh-headers
@@ -150,14 +149,12 @@ def 'gh-headers：should return correct GitHub API headers structure' [] {
   assert equal ($headers | get 7) 'curl/8.9'
 }
 
-@test
 def 'gh-headers：should reflect current GH_TOKEN value' [] {
   $env.GH_TOKEN = 'another-token-xyz'
   let headers = gh-headers
   assert str contains ($headers | get 1) 'another-token-xyz'
 }
 
-@test
 def 'pr-metadata：format should produce expected string for title and body' [] {
   # Simulate the PR metadata format string construction from review.nu
   let title = 'Fix login bug'
@@ -170,7 +167,6 @@ def 'pr-metadata：format should produce expected string for title and body' [] 
   assert equal ($pr_metadata | str starts-with "\n\n") true
 }
 
-@test
 def 'pr-metadata：format should produce expected string for title only' [] {
   let title = 'Add new feature'
   let body = ''
@@ -182,7 +178,6 @@ def 'pr-metadata：format should produce expected string for title only' [] {
   assert str contains $pr_metadata 'PR Description'
 }
 
-@test
 def 'pr-metadata：format should produce expected string for body only' [] {
   let title = ''
   let body = '## Summary\n\nThis is a description.'
@@ -193,7 +188,6 @@ def 'pr-metadata：format should produce expected string for body only' [] {
   assert str contains $pr_metadata '## Summary'
 }
 
-@test
 def 'pr-metadata：should return empty string when both title and body are empty' [] {
   let title = ''
   let body = ''
@@ -203,7 +197,6 @@ def 'pr-metadata：should return empty string when both title and body are empty
   assert equal $pr_metadata ''
 }
 
-@test
 def 'get-diff：get patch from remote PR should work' [] {
   $env.GH_TOKEN = $env.GITHUB_TOKEN?
   const repo = 'hustcer/deepseek-review'
@@ -384,6 +377,12 @@ def main [] {
     { name: "generate-exclude-regex：should work as expected", execute: { $ctx | generate-exclude-regex：should work as expected } }
     { name: "both include and exclude should work as expected", execute: { $ctx | both include and exclude should work as expected } }
     { name: "both exclude and include should work as expected", execute: { $ctx | both exclude and include should work as expected } }
+    { name: "gh-headers：should return correct GitHub API headers structure", execute: { $ctx | gh-headers：should return correct GitHub API headers structure } }
+    { name: "gh-headers：should reflect current GH_TOKEN value", execute: { $ctx | gh-headers：should reflect current GH_TOKEN value } }
+    { name: "pr-metadata：format should produce expected string for title and body", execute: { $ctx | pr-metadata：format should produce expected string for title and body } }
+    { name: "pr-metadata：format should produce expected string for title only", execute: { $ctx | pr-metadata：format should produce expected string for title only } }
+    { name: "pr-metadata：format should produce expected string for body only", execute: { $ctx | pr-metadata：format should produce expected string for body only } }
+    { name: "pr-metadata：should return empty string when both title and body are empty", execute: { $ctx | pr-metadata：should return empty string when both title and body are empty } }
     { name: "get-diff：get patch from remote PR should work", execute: { $ctx | get-diff：get patch from remote PR should work } }
     { name: "get-diff：get patch from remote PR with include should work", execute: { $ctx | get-diff：get patch from remote PR with include should work } }
     { name: "get-diff：get patch from remote PR with exclude should work", execute: { $ctx | get-diff：get patch from remote PR with exclude should work } }
